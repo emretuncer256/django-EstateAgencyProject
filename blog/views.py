@@ -1,6 +1,18 @@
-from django.shortcuts import render
+from django.views.generic import ListView, DetailView
+
+from .models import Blog
 
 
-# Create your views here.
-def index(request):
-    return render(request, "blog/index.html")
+class BlogListView(ListView):
+    model = Blog
+    paginate_by = 6  # TODO: Review pagination
+    template_name = "blog/index.html"
+    context_object_name = "blogs"
+
+
+class BlogDetailView(DetailView):
+    model = Blog
+    template_name = "blog/blog-detail.html"
+    context_object_name = "blog"
+
+# TODO: Comment functionality
