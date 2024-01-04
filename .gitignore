@@ -3,4 +3,4 @@ venv/
 MAINTEMPLATE/
 
 __pycache__/
- *.pyc
+*.pyc
