@@ -13,10 +13,15 @@ class Property(models.Model):
         SALE = "SALE", "For Sale"
         OPEN_HOUSE = "OH", "Open House"
 
+    @property
+    def display_price(self):
+        return "$ %s" % round(self.price)
+
     agent = models.ForeignKey(Agent, models.CASCADE, null=True)
     title = models.CharField(max_length=50)
     location = models.CharField(max_length=50)
     description = models.TextField(max_length=2000)
+    price = models.DecimalField(max_digits=8, decimal_places=2, default=0)
     status = models.CharField(choices=SaleStatus.choices, max_length=4)
     thumbnail = models.ImageField(upload_to="property_images")
 
