@@ -8,7 +8,6 @@ class AgentListView(ListView):
     model = Agent
     context_object_name = 'agents'
     paginate_by = 6
-    # TODO: Agent pagination will be reviewed
 
 
 class AgentDetailView(DetailView):

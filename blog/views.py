@@ -5,7 +5,7 @@ from .models import Blog
 
 class BlogListView(ListView):
     model = Blog
-    paginate_by = 6  # TODO: Review pagination
+    paginate_by = 6
     template_name = "blog/index.html"
     context_object_name = "blogs"
 
