@@ -35,12 +35,16 @@ class Blog(models.Model):
 
 class Comment(models.Model):
     name = models.CharField(max_length=30)
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True, related_name="subcomments")
     email = models.EmailField()
     website = models.URLField(blank=True)
     message = models.TextField(max_length=500)
     blog = models.ForeignKey(Blog, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     status = models.BooleanField(default=True)
+
+    def has_parent(self):
+        return True if self.parent else False
 
     def __str__(self):
         return self.name
