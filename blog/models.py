@@ -43,6 +43,10 @@ class Comment(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     status = models.BooleanField(default=True)
 
+    @classmethod
+    def comment_count_by_blog(cls, blog_id: int):
+        return len(Comment.objects.filter(blog_id=blog_id))
+
     def has_parent(self):
         return True if self.parent else False
 
