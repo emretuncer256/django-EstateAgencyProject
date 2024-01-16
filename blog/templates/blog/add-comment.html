@@ -1,0 +1,40 @@
+<div class="form-comments card shadow py-3 px-5">
+    <div class="title-box-d">
+        <h3 class="title-d card-title"> Leave a Reply</h3>
+    </div>
+    <div id="parentCommentPlaceholder"></div>
+    <button type="button" class="btn btn-primary" id="liveAlertBtn">Show live alert</button>
+    <form class="form-a" method="post" action="{% url 'blog:add-comment' slug=blog.slug %}">
+        {% csrf_token %}
+        {{ comment_form.blog }}
+        <div class="row mt-3">
+            <div class="col-md-6 mb-3">
+                <div class="form-group">
+                    <label for="id_name">Enter name</label>
+                    {{ comment_form.name }}
+                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <div class="form-group">
+                    <label for="inputEmail1">Enter email</label>
+                    {{ comment_form.email }}
+                </div>
+            </div>
+            <div class="col-md-12 mb-3">
+                <div class="form-group">
+                    <label for="id_website">Enter website</label>
+                    {{ comment_form.website }}
+                </div>
+            </div>
+            <div class="col-md-12 mb-3">
+                <div class="form-group">
+                    <label for="id_message">Enter message</label>
+                    {{ comment_form.message }}
+                </div>
+            </div>
+            <div class="col-md-12">
+                <button type="submit" class="btn btn-a">Send Message</button>
+            </div>
+        </div>
+    </form>
+</div>

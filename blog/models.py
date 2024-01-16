@@ -1,6 +1,7 @@
 from ckeditor.fields import RichTextField
 from django.db import models
 from django.template.defaultfilters import slugify
+from django.urls import reverse
 
 
 class Category(models.Model):
@@ -28,6 +29,9 @@ class Blog(models.Model):
         if not self.id:
             self.slug = slugify(self.title)
         super(Blog, self).save(*args, **kwargs)
+
+    def get_absolute_url(self):
+        return reverse('blog:detail', kwargs={"slug": self.slug})
 
     def __str__(self):
         return self.title
