@@ -35,7 +35,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-sm-12">
-                    <div class="news-img-box">
+                    <div class="news-img-box text-center">
                         <img src="{{ blog.thumbnail.url }}" alt="" class="img-fluid rounded-5">
                     </div>
                 </div>
@@ -118,22 +118,37 @@
                                             <button id="reply-btn" data-id="{{ comment.id }}"
                                                     class="btn btn-outline-success">Reply
                                             </button>
+                                            {% if comment.subcomments.count > 0 %}
+                                                <button class="btn btn-outline-dark" type="button"
+                                                        data-bs-toggle="collapse"
+                                                        data-bs-target="#subcommentsList{{ comment.id }}"
+                                                        aria-expanded="false"
+                                                        aria-controls="collapseExample">
+                                                    View ({{ comment.subcomments.count }})
+                                                    Comment{{ comment.subcomments.count|pluralize }}
+                                                </button>
+                                            {% endif %}
                                         </div>
                                     </li>
-                                    {% for subcomment in comment.subcomments.all %}
-                                        <li class="comment-children">
-                                            <div class="comment-avatar">
-                                                <img src="https://st3.depositphotos.com/9998432/13335/v/450/depositphotos_133351928-stock-illustration-default-placeholder-man-and-woman.jpg"
-                                                     alt="">
-                                            </div>
-                                            <div class="comment-details">
-                                                <h4 class="comment-author">{{ subcomment.name }}</h4>
-                                                <span>{{ subcomment.created_at|naturaltime }}</span>
-                                                <p class="comment-description">{{ subcomment.message }}</p>
-                                                {# <a class="btn btn-outline-success" href="#">Reply</a> #}
-                                            </div>
-                                        </li>
-                                    {% endfor %}
+                                    {% if comment.subcomments.count > 0 %}
+                                        <div class="collapse card card-body border-0"
+                                             id="subcommentsList{{ comment.id }}">
+                                            {% for subcomment in comment.subcomments.all|dictsort:"created_at" %}
+                                                <li class="comment-children">
+                                                    <div class="comment-avatar">
+                                                        <img src="https://st3.depositphotos.com/9998432/13335/v/450/depositphotos_133351928-stock-illustration-default-placeholder-man-and-woman.jpg"
+                                                             alt="">
+                                                    </div>
+                                                    <div class="comment-details">
+                                                        <h4 class="comment-author">{{ subcomment.name }}</h4>
+                                                        <span>{{ subcomment.created_at|naturaltime }}</span>
+                                                        <p class="comment-description">{{ subcomment.message }}</p>
+                                                        {# <a class="btn btn-outline-success" href="#">Reply</a> #}
+                                                    </div>
+                                                </li>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
                                 {% endif %}
                             {% empty %}
                                 <p class="text-muted mb-5">No comments yet. Be the first to leave a comment.</p>
@@ -155,7 +170,7 @@
             alertPlaceholder.innerHTML = "";
             const wrapper = document.createElement('div');
             wrapper.innerHTML = [
-                `<div class="alert alert-${type} alert-dismissible fade show d-flex align-items-center gap-3 shadow border-secondary-subtle" role="alert">`,
+                `<div id="subcomment-alert" class="alert alert-${type} alert-dismissible fade show d-flex align-items-center gap-3 shadow border-secondary-subtle" role="alert">`,
                 '   <span class="badge bg-warning">TO</span>',
                 '   <img src="https://st3.depositphotos.com/9998432/13335/v/450/depositphotos_133351928-stock-illustration-default-placeholder-man-and-woman.jpg" alt="Avatar" class="rounded-circle" style="width: 72px; height: 72px;">',
                 '   <div>',
@@ -172,25 +187,27 @@
     <script>
         {# TODO: Sub-comment system will be developed #}
         const replyButtons = document.querySelectorAll('#reply-btn');
+        const parentInput = document.querySelector('#id_parent');
         replyButtons.forEach(button => {
             button.addEventListener('click', () => {
-                const commentId = button.getAttribute("data-id")
+                let commentId = button.getAttribute("data-id")
                 const parentComment = button.closest(".comment-details")
 
                 const name = parentComment.querySelector(".comment-author").textContent
                 const message = parentComment.querySelector(".comment-description").textContent
                 const date = parentComment.querySelector("span").textContent
                 appendAlert(name, message, date, 'light');
-                alert(commentId)
+                parentInput.value = commentId
+
+                const parentAlert = document.querySelector(".alert");
+                document.querySelector('.form-comments').scrollIntoView({
+                    behavior: 'smooth'
+                });
+                parentAlert.addEventListener('close.bs.alert', () => {
+                    commentId = null;
+                    parentInput.value = commentId
+                })
             })
-        })
-    </script>
-    <script>
-        const alertTrigger = document.getElementById('liveAlertBtn')
-        if (alertTrigger) {
-            alertTrigger.addEventListener('click', () => {
-                appendAlert('Nice, you triggered this alert message!', 'success')
-            })
-        }
+        });
     </script>
 {% endblock %}

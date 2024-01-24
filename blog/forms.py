@@ -7,7 +7,7 @@ from .models import Comment
 class AddCommentForm(ModelForm):
     class Meta:
         model = Comment
-        fields = ("name", "email", "website", "message", "blog")
+        fields = ("name", "email", "website", "message", "blog", "parent")
 
         widgets = {
             "name": forms.TextInput(attrs={

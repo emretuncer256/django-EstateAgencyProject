@@ -3,10 +3,10 @@
         <h3 class="title-d card-title"> Leave a Reply</h3>
     </div>
     <div id="parentCommentPlaceholder"></div>
-    <button type="button" class="btn btn-primary" id="liveAlertBtn">Show live alert</button>
     <form class="form-a" method="post" action="{% url 'blog:add-comment' slug=blog.slug %}">
         {% csrf_token %}
         {{ comment_form.blog }}
+        {{ comment_form.parent }}
         <div class="row mt-3">
             <div class="col-md-6 mb-3">
                 <div class="form-group">
